@@ -1,4 +1,7 @@
 <?php
+
+use OneLogin\Saml2\Error;
+
 /**
  * Class SAMLController
  *
@@ -29,11 +32,11 @@ class SAMLController extends Controller
      * if not existent), with the user already logged in. Login triggers memberLoggedIn hooks, which allows
      * LDAP side of this module to finish off loading Member data.
      *
-     * @throws OneLogin_Saml2_Error
+     * @throws OneLogin\Saml2\Error
      */
     public function acs()
     {
-        /** @var OneLogin_Saml2_Auth $auth */
+        /** @var OneLogin\Saml2\Auth $auth */
         $auth = Injector::inst()->get('SAMLHelper')->getSAMLAuth();
         $auth->processResponse();
 
@@ -149,7 +152,7 @@ class SAMLController extends Controller
     public function metadata()
     {
         try {
-            /** @var OneLogin_Saml2_Auth $auth */
+            /** @var OneLogin\Saml2\Auth $auth */
             $auth = Injector::inst()->get('SAMLHelper')->getSAMLAuth();
             $settings = $auth->getSettings();
             $metadata = $settings->getSPMetadata();
@@ -158,9 +161,9 @@ class SAMLController extends Controller
                 header('Content-Type: text/xml');
                 echo $metadata;
             } else {
-                throw new \OneLogin_Saml2_Error(
+                throw new Error(
                     'Invalid SP metadata: ' . implode(', ', $errors),
-                    \OneLogin_Saml2_Error::METADATA_SP_INVALID
+                    Error::METADATA_SP_INVALID
                 );
             }
         } catch (Exception $e) {

@@ -59,7 +59,7 @@ class SAMLAuthenticator extends Authenticator
     {
         // $data is not used - the form is just one button, with no fields.
         $auth = Injector::inst()->get('SAMLHelper')->getSAMLAuth();
-        /** @var $auth \OneLogin_Saml2_Auth */
+        /** @var $auth \OneLogin\Saml2\Auth */
 
         Session::set('BackURL', isset($data['BackURL']) ? $data['BackURL'] : null);
         Session::save();
