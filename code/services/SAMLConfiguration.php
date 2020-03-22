@@ -74,14 +74,20 @@ class SAMLConfiguration extends SS_Object
         // SERVICE PROVIDER SECTION
         $sp = $this->config()->get('SP');
 
-        // Set baseurl for SAML messages coming back to the SP
-        $conf['baseurl'] = sprintf('%s/saml', $sp['entityId']);
+        // Set baseurl for SAML messages coming back to the SP: use baseurl if set, otherwise fallback to entityId
+        if (isset($sp['baseurl'])) {
+            $conf['baseurl'] = sprintf('%s/saml', $sp['baseurl']);
+            $acsUrl = sprintf('%s/saml/acs', $sp['baseurl']);
+        } else {
+            $conf['baseurl'] = sprintf('%s/saml', $sp['entityId']);
+            $acsUrl = sprintf('%s/saml/acs', $sp['entityId']);
+        }
 
         $spCertPath = Director::is_absolute($sp['x509cert']) ? $sp['x509cert'] : sprintf('%s/%s', BASE_PATH, $sp['x509cert']);
         $spKeyPath = Director::is_absolute($sp['privateKey']) ? $sp['privateKey'] : sprintf('%s/%s', BASE_PATH, $sp['privateKey']);
         $conf['sp']['entityId'] = $sp['entityId'];
         $conf['sp']['assertionConsumerService'] = [
-            'url' => $sp['entityId'] . '/saml/acs',
+            'url' => $acsUrl,
             'binding' => Constants::BINDING_HTTP_POST
         ];
         $conf['sp']['NameIDFormat'] = isset($sp['nameIdFormat']) ? $sp['nameIdFormat'] : Constants::NAMEID_TRANSIENT;
