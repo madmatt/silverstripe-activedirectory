@@ -62,6 +62,12 @@ class SAMLConfiguration extends SS_Object
     ];
 
     /**
+     * __BASEURL_FROM_DIRECTOR__ is used to imply that SAML configuration for the base URL should come from
+     * Director::absoluteBaseURL().
+     */
+    const BASEURL_FROM_DIRECTOR = '__BASEURL_FROM_DIRECTOR__';
+
+    /**
      * @return array
      */
     public function asArray()
@@ -76,6 +82,11 @@ class SAMLConfiguration extends SS_Object
 
         // Set baseurl for SAML messages coming back to the SP: use baseurl if set, otherwise fallback to entityId
         if (isset($sp['baseurl'])) {
+            // Allow for baseurl to be a special const value meaning that we should use the current absolute base URL
+            if ($sp['baseurl'] === self::BASEURL_FROM_DIRECTOR) {
+                $sp['baseurl'] = Director::absoluteBaseURL();
+            }
+
             $conf['baseurl'] = sprintf('%s/saml', $sp['baseurl']);
             $acsUrl = sprintf('%s/saml/acs', $sp['baseurl']);
         } else {

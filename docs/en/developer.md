@@ -164,6 +164,7 @@ attribute:
 ### Service Provider (SP)
 
  - `entityId`: URI that uniquely identifies the party. This *must* be set to the site URL (e.g.  `https://<your-site-domain>`), because we reuse it as the base URL for the SAML endpoints.
+ - `baseurl`: If your entityId is defined for you and can't be changed, you can use this to specify the baseurl for the website. You can also use the special value '\_\_BASEURL_FROM_DIRECTOR\_\_' which means it will use `Director::absoluteBaseURL()` to determine the ACS URL. Caution: If using this, you must ensure that _any_ domain that resolves to your website is defined in your metadata. You will need to customise the metadata file to list all assertionconsumerservice URLs. 
  - `privateKey`: Path to private key used for signing SAML request (the key you have generated)
  - `x509cert`: Path to certificate for the ADFS to use when verifying SAML requests (the certificate you have generated,
  matching the key above)
