@@ -87,8 +87,8 @@ class SAMLConfiguration extends SS_Object
                 $sp['baseurl'] = Director::absoluteBaseURL();
             }
 
-            $conf['baseurl'] = sprintf('%s/saml', $sp['baseurl']);
-            $acsUrl = sprintf('%s/saml/acs', $sp['baseurl']);
+            $conf['baseurl'] = Controller::join_links($sp['baseurl'], 'saml');
+            $acsUrl = Controller::join_links($sp['baseurl'], 'saml/acs');
         } else {
             $conf['baseurl'] = sprintf('%s/saml', $sp['entityId']);
             $acsUrl = sprintf('%s/saml/acs', $sp['entityId']);
